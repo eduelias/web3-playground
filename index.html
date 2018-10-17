@@ -1,0 +1,865 @@
+<html>
+    <script src="web3.js"></script>
+    <script>
+    const entityabi = [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "removedOwner",
+          "type": "address"
+        }
+      ],
+      "name": "removeOwner",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "Receivables",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "sender",
+          "type": "address"
+        }
+      ],
+      "name": "isOwner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "addOwner",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "Payables",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "inStr",
+          "type": "string"
+        },
+        {
+          "name": "v",
+          "type": "uint256"
+        }
+      ],
+      "name": "appendUintToString",
+      "outputs": [
+        {
+          "name": "str",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "v",
+          "type": "uint256"
+        }
+      ],
+      "name": "uintToString",
+      "outputs": [
+        {
+          "name": "str",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "name": "pfx",
+          "type": "string"
+        },
+        {
+          "name": "token",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "buyer",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "invoiceId",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "name": "invoice",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "value",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "timestamp",
+          "type": "uint256"
+        }
+      ],
+      "name": "InvoiceIssued",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "buyer",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "invoiceId",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "name": "invoice",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "value",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "timestamp",
+          "type": "uint256"
+        }
+      ],
+      "name": "PayableAdded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "entity",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "agreement",
+          "type": "address"
+        }
+      ],
+      "name": "EntitySignedAgreement",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "me",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "myid",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "name": "paybl",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "sender",
+          "type": "address"
+        }
+      ],
+      "name": "Debug",
+      "type": "event"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "generateInvoiceId",
+      "outputs": [
+        {
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getInvoicePrefix",
+      "outputs": [
+        {
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getName",
+      "outputs": [
+        {
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "agreement",
+          "type": "address"
+        }
+      ],
+      "name": "signAgreement",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "agAddress",
+          "type": "address"
+        }
+      ],
+      "name": "denyAgreement",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "agAddress",
+          "type": "address"
+        },
+        {
+          "name": "status",
+          "type": "uint256"
+        }
+      ],
+      "name": "setAgreementStatus",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "agAdd",
+          "type": "address"
+        }
+      ],
+      "name": "getAgreementExpiration",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "groupEntity",
+          "type": "bool"
+        }
+      ],
+      "name": "setGroupEntity",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getIsGroup",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "mindate",
+          "type": "uint256"
+        },
+        {
+          "name": "maxdate",
+          "type": "uint256"
+        }
+      ],
+      "name": "getPayablesValueByDate",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "mindate",
+          "type": "uint256"
+        },
+        {
+          "name": "maxdate",
+          "type": "uint256"
+        }
+      ],
+      "name": "getReceivablesValueByDate",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "invoiceaddress",
+          "type": "address"
+        }
+      ],
+      "name": "issueInvoice",
+      "outputs": [
+        {
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "invoice",
+          "type": "address"
+        }
+      ],
+      "name": "addReceivable",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getReceivables",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getPayables",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "invoiceId",
+          "type": "string"
+        }
+      ],
+      "name": "getInvoiceAddress",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "payableAddress",
+          "type": "address"
+        },
+        {
+          "name": "invoiceId",
+          "type": "string"
+        }
+      ],
+      "name": "addPayable",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getReceivablesLength",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getPayableLength",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_value",
+          "type": "uint256"
+        }
+      ],
+      "name": "withdraw",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "newTokenAddress",
+          "type": "address"
+        }
+      ],
+      "name": "setToken",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "balance",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getTokenAddress",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "invoice",
+          "type": "address"
+        }
+      ],
+      "name": "tryPay",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "invoice",
+          "type": "address"
+        }
+      ],
+      "name": "tryReceive",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "transfer",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "approve",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ];
+        const run = async function() {
+            const web3 = new Web3('http://localhost:24376');
+            const gasLimit = 3000000;
+            const walletInfo = {
+                address: '0x65c38bc03e79f5c08d735a6e346aa39bb8dc990a',
+                privateKey: '0x2f0e436f1ef98d5aa233320feb9dd9e597aa181f69460c8792036600274198e9'
+            };
+            const toaddress = '0x26b984a45a3691dedc62e84fc6ff4c81115df457'; //'0xfCD3d389598Ba096ba123f78C861B82603A4133c';
+            const value = 1;
+            const netid = await web3.eth.net.getId();
+            const gasPrice = await web3.eth.getGasPrice();
+            const nonce = await web3.eth.getTransactionCount(walletInfo.address);
+
+            const toBalanceB4 = await web3.eth.getBalance(toaddress);
+            console.log('To balance before: ', toBalanceB4);
+            const fromBalanceB4 = await web3.eth.getBalance(walletInfo.address);
+            console.log('From balance before: ' + fromBalanceB4);
+
+            console.log(gasPrice * gasLimit + value);
+
+            const rawTransaction = {
+                nonce: web3.utils.toHex(nonce),
+                gasPrice: 1,                
+                gas: 30000000,
+                to: web3.utils.toChecksumAddress(toaddress),
+                //from: web3.utils.toChecksumAddress(walletInfo.address),
+                value: web3.utils.toHex(value),                
+                //chainId: netid,
+                //gasPrice: web3.utils.toHex(gasPrice),
+                //gas: web3.utils.toHex(30000000),                                                
+                data: '0x7f7465737432000000000000000000000000000000000000000000000000000000600057'
+            };
+
+            const signed = await web3.eth.accounts.signTransaction(rawTransaction,walletInfo.privateKey);
+            console.log(await web3.eth.estimateGas(signed));
+            try {
+                await web3.eth.sendSignedTransaction(signed.rawTransaction);
+            } catch (e) {
+                // tslint:disable-next-line:no-console
+                console.log(e);
+            }
+        }
+
+      const runsign = async function() {
+            const web3 = new Web3('http://127.0.0.1:24376');
+            const walletInfo = {
+                address: '0x75c361754f1453094d6ee61672B13012eAb2Bfaa',
+                privateKey: '0xa1060e5f1e097f6cc770a827a3dd9cc7e5ca15eacf2594ceda9c38870b6c61ee'
+            };
+            const sellerAddress = '0x7d143d7B59489355c26a3D103d7e90b2C3dd5Cd4';
+            const buyerAddress = '0x0982109f71f770F2B0380e751da47cAA95934dd5';
+            const agreementAddress = '0x24Ca835EA13050715C92c5C32D17dd8714744F3d';
+            
+            const entityInstance = new web3.eth.Contract(entityabi, sellerAddress);            
+            const value = 0;
+            const netid = await web3.eth.net.getId();
+            const gasPrice = await web3.eth.getGasPrice();
+            const nonce = await web3.eth.getTransactionCount(walletInfo.address);      
+            const method = await entityInstance.methods.signAgreement(web3.utils.toChecksumAddress(agreementAddress))
+            const call = method.encodeABI();                  
+
+            const rawTransaction = {
+                nonce: web3.utils.toHex(nonce),                
+                to: web3.utils.toChecksumAddress(sellerAddress),
+                from: web3.utils.toChecksumAddress(walletInfo.address),
+                value: web3.utils.toHex(0),                
+                chainId: netid,
+                gasPrice: web3.utils.toHex(gasPrice),
+                gas: web3.utils.toHex(30000000),                                                
+                data: call
+            };
+			
+			const privateKey = walletInfo.privateKey.startsWith('0x') ? walletInfo.privateKey : `0x${walletInfo.privateKey}`;
+            const signed = await web3.eth.accounts.signTransaction(rawTransaction,privateKey);   
+            
+            console.log('wait...');
+            try {
+                const result = await web3.eth.sendSignedTransaction(signed.rawTransaction);
+              	console.log(result);
+            } catch (e) {
+              // tslint:disable-next-line:no-console
+              console.log(e);
+            }
+      }
+		const runevents = async function() {
+            const web3 = new Web3('http://127.0.0.1:24376');
+            const walletInfo = {
+                address: '0x65c38bc03e79f5c08d735a6e346aa39bb8dc990a',
+                privateKey: '0x2f0e436f1ef98d5aa233320feb9dd9e597aa181f69460c8792036600274198e9'
+            };
+            
+            //const BREWERY = '0x788f148aa7fc80209b3de07ceaf7dd4781736007';
+			//const MSO = '0x35b9aabd073532be24b33ea16eea0e5a2ca531f8';
+			//const CUSTOMER = '0x4082701ec509717d40e0bcd68322f84fc95004e5';
+
+			const BREWERY = '0x72aebf3328646cd194ccb0d46eaa43652b997560';
+			const MSO = '0xf51f22055bf131322dc658b4f5ea5d4d9bc1c30f';
+			const CUSTOMER = '0x2226a279557d1b26bcb59d4b2ba9924da7643a8d';
+            
+            const msoinstance = new web3.eth.Contract(entityabi, MSO);            
+            const brwinstance = new web3.eth.Contract(entityabi, BREWERY);            
+            const cstinstance = new web3.eth.Contract(entityabi, CUSTOMER);            
+            const value = 0;
+            const netid = await web3.eth.net.getId();
+            const gasPrice = await web3.eth.getGasPrice();
+            const nonce = await web3.eth.getTransactionCount(walletInfo.address);      
+            
+            const msoevents = await msoinstance.getPastEvents('InvoiceIssued', { fromBlock:0, toBlock:'latest', from: walletInfo.address });
+            const brwevents = await brwinstance.getPastEvents('InvoiceIssued', { fromBlock:0, toBlock:'latest', from: walletInfo.address });
+            const cstevents = await cstinstance.getPastEvents('InvoiceIssued', { fromBlock:0, toBlock:'latest', from: walletInfo.address });
+
+			const msopayev = await msoinstance.getPastEvents('PayableAdded', { fromBlock:0, toBlock:'latest', from: walletInfo.address });
+            const brwpayev = await brwinstance.getPastEvents('PayableAdded', { fromBlock:0, toBlock:'latest', from: walletInfo.address });
+            const cstpayev = await cstinstance.getPastEvents('PayableAdded', { fromBlock:0, toBlock:'latest', from: walletInfo.address });
+            
+            console.log(msoevents);
+            console.log(brwevents);
+            console.log(cstevents);
+
+            console.log(msopayev);
+            console.log(brwpayev);
+            console.log(cstpayev);
+      }
+      const runromethod = async function() {
+            const web3 = new Web3('http://127.0.0.1:24376');
+            const walletInfo = {
+                address: '0x65c38bc03e79f5c08d735a6e346aa39bb8dc990a',
+                privateKey: '0x2f0e436f1ef98d5aa233320feb9dd9e597aa181f69460c8792036600274198e9'
+            };
+            
+            //const BREWERY = '0x788f148aa7fc80209b3de07ceaf7dd4781736007';
+			//const MSO = '0x35b9aabd073532be24b33ea16eea0e5a2ca531f8';
+			//const CUSTOMER = '0x4082701ec509717d40e0bcd68322f84fc95004e5';
+
+			const BREWERY = '0x72aebf3328646cd194ccb0d46eaa43652b997560';
+			const MSO = '0xf51f22055bf131322dc658b4f5ea5d4d9bc1c30f';
+			const CUSTOMER = '0x2226a279557d1b26bcb59d4b2ba9924da7643a8d';
+            
+            const msoinstance = new web3.eth.Contract(entityabi, MSO);            
+            const brwinstance = new web3.eth.Contract(entityabi, BREWERY);            
+            const cstinstance = new web3.eth.Contract(entityabi, CUSTOMER);            
+            const value = 0;
+            const netid = await web3.eth.net.getId();
+            const gasPrice = await web3.eth.getGasPrice();
+            const nonce = await web3.eth.getTransactionCount(walletInfo.address);      
+            
+            const result = await msoinstance.methods.getReceivablesValueByDate(0, 999999999999).call({}, 763414);
+            console.log(result);
+      }
+      
+      runevents();
+      runromethod();
+    </script>
